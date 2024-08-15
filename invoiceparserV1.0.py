@@ -2,7 +2,6 @@
 # coding: utf-8
 
 """
-pip install pandas
 pip install pdfplumber
 pip install tqdm
 """
@@ -15,15 +14,13 @@ pip install tqdm
 # In[1]:
 
 
-#Librerias necesarias
+# Libraies needed
 import re
 import sys
 import os
 
 import requests
 import pdfplumber                           # Lib used for reading pdfs
-import pandas as pd                         # Lib used for 
-from collections import namedtuple          # Lib used for 
 from tqdm import tqdm                       # Lib used for the progress bar shown while parsing the pdf
 
 
@@ -303,7 +300,7 @@ def serviceAndCredits(pdf, i, totalpages, p):
                 # Verifiying total collected with total shown in invoice. Remember the first item of the list 
                 # servicesXClient[0] is the total shown in the invoice.
                 if totalCollected != allCredits[0]:
-                    print(f"\nError: Total credits incorrect, cliente{servicesXClient[0]}")              
+                    print(f"\nWarning: Total credits incorrect, please check the client on page: {i}")              
                 activeClient = False
             else:
                 activeClient = True 
@@ -353,7 +350,10 @@ if os.path.exists(invoicePath):
         if monthInvoiceSQLfile in monthOfYear:     # Maps the month in number
             monthInvoiceNum = monthOfYear[monthInvoiceSQLfile]
 
-        with open(f'{monthInvoiceSQLfile}-{yearInvoice}SPP.sql', 'w', encoding="utf-8") as file:
+        # name of the file SQL that will be generated.
+        name_file_generated = f'{monthInvoiceSQLfile}-{yearInvoice}SPP.sql'
+
+        with open(f'{name_file_generated}', 'w', encoding="utf-8") as file:
             sql = f"INSERT INTO {bbdd} (Year, Month, linkedAccountId, LinkedAccountName, Service, Credits, InvoiceID, CurrencyExchange) VALUES "
             file.write(sql)
 
@@ -398,6 +398,7 @@ if os.path.exists(invoicePath):
                     i=i+1                               # next page
                     p=next(iterProgress,-1)             # progress bar...
 
+        print(f'File SQL genrated --> "{name_file_generated}"')
         print("Done!")
 else:
     print("File not found!")
