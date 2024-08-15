@@ -47,12 +47,15 @@ For testing, It will use an example of an invoice from AWS, added as "invoice.pd
 
 ### Here is an example of correct run.
 
-
+![alt text](https://github.com/KoolRick/invoiceParser/blob/main/readmeFiles/correctRun.jpg?raw=true)
 
 This script have a data validator to check it has all the amounts correct.
 
 ### Here is an example of an incorrect run.
 
+It is evaluated as a warning to save time. It will generate the file with a warning.
+
+![alt text](https://github.com/KoolRick/invoiceParser/blob/main/readmeFiles/warningRun.jpg?raw=true)
 
 ## Deployment
 
