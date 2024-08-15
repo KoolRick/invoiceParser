@@ -57,7 +57,7 @@ It is evaluated as a warning to save time. It will generate the file with a warn
 
 ![Warning example](https://github.com/KoolRick/invoiceParser/blob/main/readmeFiles/warningRun.jpg?raw=true)
 
-## Deploymentsas
+## Deployment
 
 These are the domentation of the libraries used.
 
