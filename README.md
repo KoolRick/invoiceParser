@@ -14,7 +14,7 @@ So this script was created to eliminate this manual search avoding long efforts 
 
 You will need the following libraries.
 
-```
+
 Python IDE, in my case I used "Visual Studio Code" with "Anaconda Comunity".
 Python
     _version used: 3.12.4_
@@ -22,7 +22,7 @@ pdfplumber  --> It is the protagonist for this project. It will handle the PDF f
     _version used: 0.11.2_
 tqdm        --> It used for a graph a progress bar.
     _version used: 4.66.4_
-```
+
 ### Installing
 
 First install Python.
