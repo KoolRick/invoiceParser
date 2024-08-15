@@ -16,6 +16,7 @@ You will need the following libraries.
 
 
 Python IDE, in my case I used "Visual Studio Code" with "Anaconda Comunity".
+
 **Python**
 >*version used: 3.12.4*
 
