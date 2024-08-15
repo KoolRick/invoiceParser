@@ -17,7 +17,7 @@ You will need the following libraries.
 
 Python IDE, in my case I used "Visual Studio Code" with "Anaconda Comunity".
 Python
-    >*version used: 3.12.4*
+>*version used: 3.12.4*
 pdfplumber  --> It is the protagonist for this project. It will handle the PDF file.
     >*version used: 0.11.2*
 tqdm        --> It used for a graph a progress bar.
@@ -38,6 +38,8 @@ Or from terminal with these commands.
 
 ```
 pip install pdfplumber
+```
+```
 pip install tqdm
 ```
 
