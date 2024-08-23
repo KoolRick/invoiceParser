@@ -8,14 +8,14 @@ Then it creates a SQL script to execute over a data base.
 This project was inspired to make easier the billing of the consumption of each month of cloud services, in this case AWS. 
 It was needed to extract manually from the pdf invoices to account for some credits AWs gives.
 
-So this script was created to eliminate this manual search avoding long efforts extracting this data, human error and saving time.
+So this script was created to eliminate this manual search avoiding long efforts extracting this data, human error and saving time.
 
 ### Prerequisites
 
 You will need the following libraries.
 
 
-Python IDE, in my case I used "Visual Studio Code" with "Anaconda Comunity".
+Python IDE, in my case I used "Visual Studio Code" with "Anaconda Community".
 
 **Python**
 >*version used: 3.12.4*
@@ -64,7 +64,7 @@ It is evaluated as a warning to save time. It will generate the file with a warn
 
 ## Deployment
 
-These are the domentation of the libraries used.
+These are the documentation of the libraries used.
 
 ## Built With
 

@@ -8,19 +8,19 @@ pip install tqdm
 
 
 #--------------------------------------------------
-# run python invoiceparserv1.0.py factura.pdf
+# run python invoiceparserV1.0.py invoice.pdf
 #--------------------------------------------------
 
 # In[1]:
 
 
-# Libraies needed
+# Libraries needed
 import re
 import sys
 import os
 
 import requests
-import pdfplumber                           # Lib used for reading pdfs
+import pdfplumber                           # Lib used for reading PDF
 from tqdm import tqdm                       # Lib used for the progress bar shown while parsing the pdf
 
 
@@ -44,7 +44,7 @@ invoicePath=pwd + "\\" +invoice
 bbdd = "`data_base_AWS-SPP_Discounts`"
 
 # Dict used for months
-monthOfYear = {#diccionario para los meses
+monthOfYear = { # Dictionary for months
     'January': 1,
     'February': 2,
     'March': 3,
@@ -63,7 +63,7 @@ monthOfYear = {#diccionario para los meses
 # In[3]:
 
 # This method finds the id and name of the client
-def nameAndCode(page):#completo
+def nameAndCode(page):
 
     # This method has one input parameter one pdf page and it will be reading line by line
     # until it finds the keywords of the page where are all the client details. When it 
@@ -81,7 +81,7 @@ def nameAndCode(page):#completo
                     nameClientRaw, *vend = line2.split()
                     # This split will save whole line with the following:
                         # nameClientRaw= Client name(FIRST WORD ONLY!!!)
-                        # vend=resto de la linea
+                        # vend = Remainder of the line
                             # [-1]=price
                             # [-2]=*literal "USD"
                             # [-3]=ID client
@@ -91,7 +91,7 @@ def nameAndCode(page):#completo
                     # Extract the not used data
                     vend.pop()#price
                     vend.pop()#*literal "USD"
-                    vend.pop()#codCLiente
+                    vend.pop()#codClient
                     if vend!=[]: # Keeps loading the rest of the client's name
                         nameComplete = nameClientRaw + " " +' '.join(vend)
                     else:
@@ -103,7 +103,7 @@ def nameAndCode(page):#completo
 # In[4]:
 
 # This method find the current currency exchange during the period of the invoice.
-def currecyExchange(page):
+def currencyExchange(page):
 
     # This method has one input parameter one pdf page and it will be reading line by line
     # until it finds the keywords of the page where exchange currency of the period of the invoice. 
@@ -116,16 +116,16 @@ def currecyExchange(page):
             title, *exchangeRaw = line.split()
             # This split will save whole line with the following:
                 # title=*literal "AWS"
-                # exchangeRaw=resto de la linea
+                # exchangeRaw= Remainder of the line
                     # [-1]=price in USD
                     # [-2]=*literal "USD"
                     # [-3]=price in EUR
                     # ...                   
                     # [-6]=exchange currency            
-            currentExchage=exchangeRaw[-6]
-            return currentExchage
+            currentExchange=exchangeRaw[-6]
+            return currentExchange
 
-## End method currecyExchange            
+## End method currencyExchange            
 # In[5]:
 
 # This method find the date of the period of the invoice.
@@ -183,7 +183,7 @@ def invoiceId(page):
 
 ## The main reason of creating this script is to collect all the "SPP discount" AWS give per each service.
 ## So this method will look for the keywords "Discount (AWS SPP Discount)" and extract the amount of discount.
-## The PDF has a summary SPP discount per cliente and detailed SPP discount per service of each client.
+## The PDF has a summary SPP discount per client and detailed SPP discount per service of each client.
 ## This amount summary per client can be used as a way to check if everything is going correctly
 
 def serviceAndCredits(pdf, i, totalpages, p):
@@ -209,14 +209,14 @@ def serviceAndCredits(pdf, i, totalpages, p):
     found = False
     
     while True:
-        # Case base if there is no active cliente. Meaning, the client has no more credits SPP.
+        # Case base if there is no active client. Meaning, the client has no more credits SPP.
         if activeClient == False:
             break
         # Point to current page
         page = pdf.pages[i]
         text = page.extract_text()
 
-        # As the lib PdfPumpler has the hability to filter data thru the font type. The next line is lambda function
+        # As the lib PdfPumpler has the ability to filter data thru the font type. The next line is lambda function
         # filter extracting the data that in bold. In which, this will be all the services of a client in "page".
         clean_text = page.filter(lambda obj: obj["object_type"] == "char" and  "Bold" in obj["fontname"])
         textServ = clean_text.extract_text()
@@ -255,7 +255,7 @@ def serviceAndCredits(pdf, i, totalpages, p):
                     allCredits.append("-" + costSPPRaw[-1])
             elif activeClient == True:
                 while line != -1:
-                    if activeServiceNext not in line:# or servicioActivoSig!="End":
+                    if activeServiceNext not in line:# or activeServiceNext!="End":
                         if lineSPPCredit in line:
                             disc, *costSPPRaw = line.split()
                             costSPPRaw[-1] = costSPPRaw[-1].replace(",","")
@@ -292,12 +292,12 @@ def serviceAndCredits(pdf, i, totalpages, p):
         if i<totalpages-1:
             pageSig = pdf.pages[i+1]
             text2 = pageSig.extract_text()
-            iterClienteActivo=iter(text2.split('\n'))
-            linea2=next(iterClienteActivo)
-            # if client finished. The knows when a cliente is finish when on the first line of the next page says
+            iterActiveClient=iter(text2.split('\n'))
+            line2=next(iterActiveClient)
+            # if client finished. The knows when a client is finish when on the first line of the next page says
             # "Summary for Linked Account"
-            if lineSummary in linea2:
-                # Verifiying total collected with total shown in invoice. Remember the first item of the list 
+            if lineSummary in line2:
+                # Verifying total collected with total shown in invoice. Remember the first item of the list 
                 # servicesXClient[0] is the total shown in the invoice.
                 if totalCollected != allCredits[0]:
                     print(f"\nWarning: Total credits incorrect, please check the client on page: {i}")              
@@ -314,9 +314,9 @@ def serviceAndCredits(pdf, i, totalpages, p):
         if allCredits[-1] != 0:
             servicesXPag=[]
         else:
-            ultimoServicio=servicesXPag[-1]
+            lastService=servicesXPag[-1]
             servicesXPag=[]
-            servicesXPag.append(ultimoServicio)
+            servicesXPag.append(lastService)
 
     servicesXClient.pop(0)                      # Delete name cliente
     allCredits.pop(0)                           # Delete total
@@ -335,8 +335,8 @@ if os.path.exists(invoicePath):
         # Looking for currency exchange
         page = pdf.pages[0] # Because It is always on the first page.
         textPage = page.extract_text()
-        currentExchage=currecyExchange(textPage)
-        #print(currentExchage)
+        currentExchange=currencyExchange(textPage)
+        #print(currentExchange)
 
         # Looking for invoice ID number
         invoiceNumber=invoiceId(textPage)
@@ -379,7 +379,7 @@ if os.path.exists(invoicePath):
                     textPage = page.extract_text()
                     
                     # Looking for ID client and name
-                    codCliente, nameComplete = nameAndCode(textPage)
+                    codClient, nameComplete = nameAndCode(textPage)
                     sql = f"\n\n-- {nameComplete}"
                     file.write(sql)
 
@@ -388,17 +388,17 @@ if os.path.exists(invoicePath):
 
                     #print(f"servCreditSPP: {servCreditSPP}")
                     
-                    for servicios in servCreditSPP:     # Iterating clients
+                    for services in servCreditSPP:     # Iterating clients
 
-                        if(i==totalpages-1 and servicios == list(servCreditSPP.keys())[-1]):#ultimo
-                            sql=f"\n({yearInvoice}, {monthInvoiceNum}, \"{codCliente}\", \"{nameComplete}\", \"{servicios}\", {servCreditSPP[servicios]}, \"{invoiceNumber}\", {currentExchage})"
+                        if(i==totalpages-1 and services == list(servCreditSPP.keys())[-1]):#ultimo
+                            sql=f"\n({yearInvoice}, {monthInvoiceNum}, \"{codClient}\", \"{nameComplete}\", \"{services}\", {servCreditSPP[services]}, \"{invoiceNumber}\", {currentExchange})"
                         else:
-                            sql=f"\n({yearInvoice}, {monthInvoiceNum}, \"{codCliente}\", \"{nameComplete}\", \"{servicios}\", {servCreditSPP[servicios]}, \"{invoiceNumber}\", {currentExchage}),"
+                            sql=f"\n({yearInvoice}, {monthInvoiceNum}, \"{codClient}\", \"{nameComplete}\", \"{services}\", {servCreditSPP[services]}, \"{invoiceNumber}\", {currentExchange}),"
                         file.write(sql)    
                     i=i+1                               # next page
                     p=next(iterProgress,-1)             # progress bar...
 
-        print(f'File SQL genrated --> "{name_file_generated}"')
+        print(f'File SQL generated --> "{name_file_generated}"')
         print("Done!")
 else:
     print("File not found!")
