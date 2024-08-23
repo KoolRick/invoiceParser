@@ -172,7 +172,7 @@ def invoiceId(page):
             # This split will save whole line with the following:
                 # title = *literal "VAT"
                 # invoiceIdRaw = rest of the line
-                    # [-1]=id de factura              
+                    # [-1]=invoice id              
             invoiceNumber=invoiceIdRaw[-1]
             return invoiceNumber
 
@@ -318,7 +318,7 @@ def serviceAndCredits(pdf, i, totalpages, p):
             servicesXPag=[]
             servicesXPag.append(lastService)
 
-    servicesXClient.pop(0)                      # Delete name cliente
+    servicesXClient.pop(0)                      # Delete name client
     allCredits.pop(0)                           # Delete total
     servCreditSPP=dict(zip(servicesXClient, allCredits))  
  
@@ -328,7 +328,7 @@ def serviceAndCredits(pdf, i, totalpages, p):
 
 
 if os.path.exists(invoicePath):
-    print(f"Analizing file {invoicePath}")
+    print(f"Analyzing file {invoicePath}")
     with pdfplumber.open(invoicePath) as pdf:
         totalpages = len(pdf.pages)
 
